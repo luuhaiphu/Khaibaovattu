@@ -1,0 +1,457 @@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{background:#fff;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;width:360px;margin:0 auto;border-radius:16px;overflow:hidden;border:0.5px solid #c6c6c8;position:relative}
+.screen{display:none;flex-direction:column;min-height:640px}
+.screen.on{display:flex}
+
+/* Nav */
+.nav{background:#fff;padding:14px 16px 8px}
+.nav-back{display:flex;align-items:center;gap:4px;color:#007aff;font-size:17px;cursor:pointer;background:none;border:none;padding:0;margin-bottom:6px}
+.nav-title{font-size:22px;font-weight:700;color:#000;letter-spacing:-0.5px}
+.nav-sub{font-size:14px;color:#8e8e93;margin-top:2px}
+
+/* Body */
+.body{flex:1;padding:20px 16px;display:flex;flex-direction:column;gap:20px;background:#fff;overflow-y:auto;position:relative}
+
+/* Field label */
+.field-label{font-size:15px;font-weight:600;color:#000;margin-bottom:8px;letter-spacing:-0.2px}
+
+/* Input field */
+.field-input{display:flex;align-items:center;justify-content:space-between;border:1px solid #d1d1d6;border-radius:12px;padding:14px 16px;cursor:pointer;background:#fff}
+.field-input span{font-size:16px;color:#000}
+.field-input.active{border-color:#007aff}
+
+/* Dropdown */
+.dropdown-wrap{position:relative}
+.dropdown-menu{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.12);z-index:100;overflow:hidden;display:none}
+.dropdown-menu.open{display:block}
+.dropdown-item{padding:16px 16px;font-size:16px;color:#000;cursor:pointer;border-bottom:0.5px solid #f2f2f7}
+.dropdown-item:last-child{border-bottom:none}
+.dropdown-item.selected{color:#007aff;font-weight:500}
+.dropdown-item:active{background:#f2f2f7}
+
+/* Empty state */
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px;margin-top:8px}
+.empty-folder{width:100px;height:100px;margin:0 auto}
+.empty-text{font-size:16px;color:#3c3c43;font-weight:400}
+
+/* FAB */
+.fab-wrap{padding:0 16px 24px;display:flex;justify-content:flex-end}
+.fab{width:56px;height:56px;background:#007aff;border-radius:16px;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,122,255,0.4)}
+
+/* Calendar overlay */
+.cal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;z-index:200;border-radius:16px}
+.cal-overlay.open{display:flex}
+.cal-sheet{background:#fff;border-radius:16px;padding:20px 16px 16px;width:300px;box-shadow:0 8px 32px rgba(0,0,0,0.18)}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-nav{background:none;border:none;cursor:pointer;color:#8e8e93;font-size:20px;padding:4px 8px}
+.cal-month{font-size:17px;font-weight:700;color:#000;letter-spacing:-0.3px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:16px}
+.cal-dow{font-size:12px;color:#8e8e93;text-align:center;padding:4px 0;font-weight:500}
+.cal-day{font-size:15px;color:#000;text-align:center;padding:8px 2px;cursor:pointer;border-radius:8px;border:none;background:none}
+.cal-day:hover{background:#f2f2f7}
+.cal-day.today{background:#007aff;color:#fff;border-radius:10px;font-weight:600}
+.cal-day.today::after{content:'·';display:block;font-size:6px;margin-top:-4px;color:rgba(255,255,255,0.7)}
+.cal-day.other-month{color:#c7c7cc}
+.cal-day.selected{background:#007aff;color:#fff;border-radius:10px;font-weight:600}
+.cal-actions{display:flex;gap:10px}
+.cal-btn{flex:1;padding:13px;border-radius:12px;font-size:16px;font-weight:500;cursor:pointer;border:1.5px solid #d1d1d6;background:#fff;color:#000}
+.cal-btn.primary{background:#007aff;color:#fff;border-color:#007aff;font-weight:600}
+
+/* Other screens */
+.nav2{background:#fff;padding:12px 16px 10px;border-bottom:0.5px solid #c6c6c8}
+.nav2-top{display:flex;align-items:center;gap:10px}
+.back2{background:none;border:none;color:#007aff;font-size:17px;cursor:pointer;display:flex;align-items:center;gap:2px;padding:0}
+.nav2-title{font-size:17px;font-weight:600;color:#000;letter-spacing:-0.4px}
+.nav2-sub{font-size:13px;color:#8e8e93;margin-top:1px}
+.body2{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;background:#f2f2f7;overflow-y:auto}
+.section-header{font-size:13px;color:#8e8e93;font-weight:400;margin-bottom:6px;padding-left:2px}
+.ios-card{background:#fff;border-radius:12px;overflow:hidden}
+.ios-row{display:flex;align-items:center;padding:12px 14px;border-bottom:0.5px solid #e5e5ea}
+.ios-row:last-child{border-bottom:none}
+.row-label{flex:1}
+.row-name{font-size:15px;color:#000;font-weight:400;letter-spacing:-0.2px}
+.row-meta{font-size:12px;color:#8e8e93;margin-top:1px}
+.row-suggest{font-size:12px;color:#007aff;margin-top:1px}
+.row-warn{font-size:12px;color:#ff9500;margin-top:1px}
+.row-right{display:flex;align-items:center}
+.qty-minus,.qty-plus{width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:300}
+.qty-minus{background:#e5e5ea;color:#000}
+.qty-plus{background:#007aff;color:#fff}
+.qty-num{min-width:36px;text-align:center;font-size:15px;font-weight:500;color:#000}
+.qty-num.changed{color:#ff9500}
+.qty-num.saved{color:#34c759}
+.bottom{background:#fff;border-top:0.5px solid #c6c6c8;padding:12px 16px}
+.btn-main{width:100%;padding:13px;background:#007aff;color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:600;cursor:pointer;letter-spacing:-0.3px}
+.btn-ghost{width:100%;padding:12px;background:none;color:#007aff;border:none;font-size:17px;cursor:pointer;margin-top:4px}
+.info-banner{background:#fff8e6;border-radius:10px;padding:10px 12px;display:flex;gap:8px;align-items:flex-start}
+.info-banner-warn{background:#fff3e5}
+.banner-text{font-size:12px;color:#633806;line-height:1.5}
+.banner-text b{color:#412402}
+.confirm-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:0.5px solid #e5e5ea}
+.confirm-row:last-child{border-bottom:none}
+.confirm-label{font-size:14px;color:#8e8e93}
+.confirm-val{font-size:14px;color:#000;font-weight:500}
+.confirm-val.green{color:#34c759}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.pill-orange{background:#fff3e5;color:#854F0B}
+.pill-green{background:#eaf3de;color:#27500A}
+.pill-red{background:#fcebeb;color:#A32D2D}
+.modal-bg{background:rgba(0,0,0,0.35);display:flex;align-items:flex-end;min-height:640px}
+.modal-sheet{background:#fff;border-radius:16px 16px 0 0;padding:20px 16px 24px;width:100%}
+.sheet-title{font-size:17px;font-weight:600;color:#000;margin-bottom:4px}
+.sheet-sub{font-size:13px;color:#8e8e93;margin-bottom:16px;line-height:1.5}
+.reason-opt{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:#f2f2f7;border-radius:10px;cursor:pointer;margin-bottom:8px}
+.reason-opt.sel{background:#e6f1fb}
+.reason-text{font-size:15px;color:#000}
+.reason-opt.sel .reason-text{color:#007aff;font-weight:500}
+.check{width:22px;height:22px;border-radius:50%;border:1.5px solid #c7c7cc;display:flex;align-items:center;justify-content:center}
+.check.on{background:#007aff;border-color:#007aff}
+.check.on::after{content:'';width:5px;height:9px;border:2px solid #fff;border-left:none;border-top:none;transform:rotate(45deg) translate(-1px,-1px)}
+.change-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:0.5px solid #e5e5ea}
+.change-row:last-child{border-bottom:none}
+.goal-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px}
+.goal-label{font-size:14px;color:#8e8e93}
+.goal-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.goal-threshold{font-size:14px;font-weight:600;color:#000}
+.goal-status{font-size:11px;font-weight:500}
+.goal-status.pass{color:#34c759}
+.goal-status.fail{color:#ff3b30}
+</style>
+
+<div class="wrap">
+
+<!-- S1: Danh sách - layout mới -->
+<div class="screen on" id="s1">
+  <!-- Calendar overlay -->
+  <div class="cal-overlay" id="cal-overlay">
+    <div class="cal-sheet">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="calMove(-1)">‹</button>
+        <span class="cal-month" id="cal-title">Tháng 5 2026</span>
+        <button class="cal-nav" onclick="calMove(1)">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-actions">
+        <button class="cal-btn" onclick="calCancel()">Hủy</button>
+        <button class="cal-btn primary" onclick="calConfirm()">Chọn</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nav-back"><i class="ti ti-chevron-left" style="font-size:19px"></i> Khai báo vật tư</button>
+    <div class="nav-title">Khai báo vật tư</div>
+    <div class="nav-sub">268789 - Lưu Hải Phú, ST: 3755</div>
+  </div>
+
+  <div class="body">
+    <!-- Thời gian -->
+    <div>
+      <div class="field-label">Thời gian</div>
+      <div class="field-input" id="date-field" onclick="openCal()">
+        <span id="date-display">15/05/2026</span>
+        <i class="ti ti-calendar-event" style="font-size:20px;color:#8e8e93"></i>
+      </div>
+    </div>
+
+    <!-- Trạng thái -->
+    <div>
+      <div class="field-label">Trạng thái</div>
+      <div class="dropdown-wrap">
+        <div class="field-input" id="status-field" onclick="toggleDropdown()">
+          <span id="status-display">Khai báo vật tư</span>
+          <i class="ti ti-chevron-down" id="dropdown-icon" style="font-size:18px;color:#8e8e93"></i>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu">
+          <div class="dropdown-item selected" onclick="selectStatus(this,'Khai báo vật tư')">Khai báo vật tư</div>
+          <div class="dropdown-item" onclick="selectStatus(this,'Siêu thị chưa cập nhật')">Siêu thị chưa cập nhật</div>
+          <div class="dropdown-item" onclick="selectStatus(this,'Siêu thị chờ duyệt')">Siêu thị chờ duyệt</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state">
+      <svg class="empty-folder" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="28" width="110" height="68" rx="8" fill="#c5cae9"/>
+        <path d="M5 36c0-4.4 3.6-8 8-8h30l8 10H107c4.4 0 8 3.6 8 8v42c0 4.4-3.6 8-8 8H13c-4.4 0-8-3.6-8-8V36z" fill="#7986cb"/>
+        <rect x="30" y="8" width="34" height="42" rx="4" fill="#e8eaf6" transform="rotate(-8 30 8)"/>
+        <rect x="38" y="6" width="34" height="42" rx="4" fill="#fff" transform="rotate(-3 38 6)"/>
+        <circle cx="60" cy="62" r="14" fill="rgba(255,255,255,0.25)"/>
+        <text x="60" y="67" text-anchor="middle" font-size="16" fill="#fff" font-weight="700">?</text>
+        <circle cx="78" cy="74" r="8" fill="rgba(255,255,255,0.2)"/>
+        <line x1="84" y1="80" x2="92" y2="88" stroke="rgba(255,255,255,0.4)" stroke-width="3" stroke-linecap="round"/>
+        <text x="68" y="20" font-size="11" fill="#9fa8da">?</text>
+        <text x="80" y="14" font-size="9" fill="#9fa8da">?</text>
+      </svg>
+      <div class="empty-text">Không có khai báo nào!</div>
+    </div>
+  </div>
+
+  <div class="fab-wrap">
+    <button class="fab" onclick="goTo('s2')">
+      <i class="ti ti-plus" style="font-size:28px;color:#fff"></i>
+    </button>
+  </div>
+</div>
+
+<!-- S2: Nhập số lượng -->
+<div class="screen" id="s2">
+  <div class="nav2">
+    <div class="nav2-top">
+      <button class="back2" onclick="goTo('s1')"><i class="ti ti-chevron-left" style="font-size:20px;color:#007aff"></i><span>Quay lại</span></button>
+    </div>
+    <div style="margin-top:4px">
+      <div class="nav2-title">Khai báo vật tư</div>
+      <div class="nav2-sub">268789 – Lưu Hải Phú · ST: 3755</div>
+    </div>
+  </div>
+  <div class="body2">
+    <div class="info-banner">
+      <i class="ti ti-info-circle" style="font-size:16px;color:#EF9F27;flex-shrink:0;margin-top:1px"></i>
+      <div class="banner-text">Số lượng được <b>hệ thống tính sẵn</b>. Bạn chỉ có thể điều chỉnh trong biên cho phép. Tăng &gt;10% cần lý do.</div>
+    </div>
+    <div>
+      <div class="section-header">Danh sách vật tư</div>
+      <div class="ios-card">
+        <div class="ios-row"><div class="row-label"><div class="row-name">Túi lưới</div><div class="row-meta">Kg · Gợi ý: <b style="color:#007aff">210</b></div><div class="row-suggest" id="note-tl">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('tl',-10,210,0,20)">−</button><span class="qty-num" id="qty-tl">210</span><button class="qty-plus" onclick="adj('tl',10,210,0,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Túi BHX trung</div><div class="row-meta">Kg · Gợi ý: <b style="color:#007aff">80</b> · 1 kiện = 10 kg</div><div class="row-warn" id="note-tbxt">⚠ Hệ số sd 132% – nên giảm</div></div><div class="row-right"><button class="qty-minus" onclick="adj('tbxt',-10,80,-100,20)">−</button><span class="qty-num" id="qty-tbxt">80</span><button class="qty-plus" onclick="adj('tbxt',10,80,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Túi BHX lớn</div><div class="row-meta">Kg · Gợi ý: <b style="color:#007aff">60</b> · 1 kiện = 10 kg</div><div class="row-suggest" id="note-tbxl">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('tbxl',-10,60,-100,20)">−</button><span class="qty-num" id="qty-tbxl">60</span><button class="qty-plus" onclick="adj('tbxl',10,60,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Bao cuộn lớn</div><div class="row-meta">Kg · Gợi ý: <b style="color:#007aff">30</b> · 1 kiện = 5 kg</div><div class="row-suggest" id="note-bcl">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('bcl',-5,30,-100,20)">−</button><span class="qty-num" id="qty-bcl">30</span><button class="qty-plus" onclick="adj('bcl',5,30,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Hộp nhựa PE</div><div class="row-meta">Thùng · Gợi ý: <b style="color:#007aff">15</b></div><div class="row-suggest" id="note-hnpe">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('hnpe',-1,15,-100,20)">−</button><span class="qty-num" id="qty-hnpe">15</span><button class="qty-plus" onclick="adj('hnpe',1,15,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Vỉ trắng nhỏ</div><div class="row-meta">Cây – 125 vỉ · Gợi ý: <b style="color:#007aff">8</b></div><div class="row-suggest" id="note-vtn">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('vtn',-1,8,-100,20)">−</button><span class="qty-num" id="qty-vtn">8</span><button class="qty-plus" onclick="adj('vtn',1,8,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Vỉ trắng lớn</div><div class="row-meta">Cây – 100 vỉ · Gợi ý: <b style="color:#007aff">6</b></div><div class="row-suggest" id="note-vtl">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('vtl',-1,6,-100,20)">−</button><span class="qty-num" id="qty-vtl">6</span><button class="qty-plus" onclick="adj('vtl',1,6,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Vỉ đen nhỏ</div><div class="row-meta">Cây – 125 vỉ · Gợi ý: <b style="color:#007aff">5</b></div><div class="row-suggest" id="note-vdn">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('vdn',-1,5,-100,20)">−</button><span class="qty-num" id="qty-vdn">5</span><button class="qty-plus" onclick="adj('vdn',1,5,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Túi BHX nhỏ</div><div class="row-meta">Kg · Gợi ý: <b style="color:#007aff">40</b> · 1 kiện = 10 kg</div><div class="row-suggest" id="note-tbxn">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('tbxn',-10,40,-100,20)">−</button><span class="qty-num" id="qty-tbxn">40</span><button class="qty-plus" onclick="adj('tbxn',10,40,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Giấy in cân</div><div class="row-meta">Cuộn · Gợi ý: <b style="color:#007aff">50</b> · 1 thùng = 25 cuộn</div><div class="row-suggest" id="note-gic">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('gic',-5,50,-100,20)">−</button><span class="qty-num" id="qty-gic">50</span><button class="qty-plus" onclick="adj('gic',5,50,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Giấy in nhiệt trắng</div><div class="row-meta">Thùng · Gợi ý: <b style="color:#007aff">4</b></div><div class="row-suggest" id="note-gint">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('gint',-1,4,-100,20)">−</button><span class="qty-num" id="qty-gint">4</span><button class="qty-plus" onclick="adj('gint',1,4,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Miếng hút ẩm</div><div class="row-meta">Miếng · Gợi ý: <b style="color:#007aff">200</b></div><div class="row-suggest" id="note-mha">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('mha',-10,200,-100,20)">−</button><span class="qty-num" id="qty-mha">200</span><button class="qty-plus" onclick="adj('mha',10,200,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Tem Úc</div><div class="row-meta">Cái · Gợi ý: <b style="color:#007aff">100</b></div><div class="row-suggest" id="note-tu">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('tu',-10,100,-100,20)">−</button><span class="qty-num" id="qty-tu">100</span><button class="qty-plus" onclick="adj('tu',10,100,-100,20)">+</button></div></div>
+        <div class="ios-row"><div class="row-label"><div class="row-name">Giấy in nhiệt vàng</div><div class="row-meta">Cuộn · Gợi ý: <b style="color:#007aff">20</b></div><div class="row-suggest" id="note-ginv">Đúng gợi ý</div></div><div class="row-right"><button class="qty-minus" onclick="adj('ginv',-2,20,-100,20)">−</button><span class="qty-num" id="qty-ginv">20</span><button class="qty-plus" onclick="adj('ginv',2,20,-100,20)">+</button></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom"><button class="btn-main" onclick="tryConfirm()">Tiếp tục</button></div>
+</div>
+
+<!-- S2b: Modal lý do -->
+<div class="screen" id="s2b">
+  <div class="modal-bg">
+    <div class="modal-sheet">
+      <div class="sheet-title">Lý do tăng số lượng</div>
+      <div class="sheet-sub">Bạn đang tăng <b id="modal-item"></b> lên <b id="modal-pct"></b>. Vui lòng chọn lý do để RSM xác nhận.</div>
+      <div class="reason-opt" onclick="selectReason(this)"><span class="reason-text">Nhu cầu thực tế tăng đột biến</span><div class="check"></div></div>
+      <div class="reason-opt" onclick="selectReason(this)"><span class="reason-text">Sắp hết hàng tồn kho</span><div class="check"></div></div>
+      <div class="reason-opt" onclick="selectReason(this)"><span class="reason-text">Chương trình khuyến mãi sắp tới</span><div class="check"></div></div>
+      <div class="reason-opt" onclick="selectReason(this)"><span class="reason-text">Lý do khác</span><div class="check"></div></div>
+      <button class="btn-main" id="btn-reason-ok" onclick="confirmReason()" style="margin-top:12px" disabled>Xác nhận lý do</button>
+      <button class="btn-ghost" onclick="cancelReason()">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- S3: Xác nhận -->
+<div class="screen" id="s3">
+  <div class="nav2">
+    <div class="nav2-top"><button class="back2" onclick="goTo('s2')"><i class="ti ti-chevron-left" style="font-size:20px;color:#007aff"></i><span>Quay lại</span></button></div>
+    <div style="margin-top:4px"><div class="nav2-title">Xác nhận khai báo</div><div class="nav2-sub">268789 – Lưu Hải Phú · ST: 3755</div></div>
+  </div>
+  <div class="body2">
+    <div id="section-changes" style="display:none">
+      <div class="section-header">Các thay đổi so với gợi ý</div>
+      <div class="ios-card" id="changes-list"></div>
+    </div>
+    <div>
+      <div class="section-header">Tóm tắt đơn hàng</div>
+      <div class="ios-card">
+        <div class="confirm-row"><span class="confirm-label">Tổng số mặt hàng</span><span class="confirm-val">14 loại</span></div>
+        <div class="confirm-row" id="row-down" style="display:none"><span class="confirm-label">Điều chỉnh giảm</span><span class="confirm-val green" id="cf-down">–</span></div>
+        <div class="confirm-row" id="row-up-ok" style="display:none"><span class="confirm-label">Tăng ≤ 10%</span><span class="confirm-val" style="color:#ff9500" id="cf-up-ok">–</span></div>
+        <div class="confirm-row" id="row-up-rsm" style="display:none">
+          <span class="confirm-label" style="display:flex;align-items:center;gap:4px">Tăng &gt; 10% <span class="pill pill-red" style="font-size:10px">Chờ RSM</span></span>
+          <span class="confirm-val" style="color:#ff3b30" id="cf-up-rsm">–</span>
+        </div>
+        <div class="confirm-row" style="border-top:0.5px solid #e5e5ea"><span class="confirm-label" style="font-weight:500;color:#000">Ước tính tiết kiệm</span><span class="confirm-val green" id="cf-save">0 đ</span></div>
+      </div>
+    </div>
+    <div id="rsm-banner" style="display:none">
+      <div class="info-banner info-banner-warn">
+        <i class="ti ti-user-check" style="font-size:16px;color:#ff9500;flex-shrink:0;margin-top:1px"></i>
+        <div class="banner-text"><b>RSM cần xác nhận</b> các mặt hàng tăng &gt;10%. Khai báo sẽ ở trạng thái "Chờ duyệt" cho đến khi được phê duyệt.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom">
+    <button class="btn-main" onclick="goTo('s4')">Gửi khai báo</button>
+    <button class="btn-ghost" onclick="goTo('s2')">Chỉnh sửa lại</button>
+  </div>
+</div>
+
+<!-- S4: Thành công -->
+<div class="screen" id="s4">
+  <div class="nav2">
+    <div class="nav2-top"><button class="back2" onclick="goTo('s1')"><i class="ti ti-chevron-left" style="font-size:20px;color:#007aff"></i><span>Quay lại</span></button></div>
+    <div style="margin-top:4px"><div class="nav2-title">Khai báo vật tư</div><div class="nav2-sub">268789 – Lưu Hải Phú · ST: 3755</div></div>
+  </div>
+  <div class="body2" style="align-items:center;justify-content:center;text-align:center;gap:16px">
+    <div style="width:72px;height:72px;background:#eaf3de;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto">
+      <i class="ti ti-check" style="font-size:36px;color:#34c759"></i>
+    </div>
+    <div>
+      <div style="font-size:20px;font-weight:700;color:#000;margin-bottom:6px;letter-spacing:-0.5px">Gửi thành công</div>
+      <div style="font-size:14px;color:#8e8e93;line-height:1.6">Tháng 5 / 2026<br>Mã khai báo: KB-3755-0515</div>
+    </div>
+    <div class="ios-card" style="width:100%;text-align:left">
+      <div class="confirm-row"><span class="confirm-label">Trạng thái</span><span id="s4-status" class="pill pill-orange">Chờ RSM duyệt</span></div>
+      <div class="confirm-row"><span class="confirm-label">Tiết kiệm ước tính</span><span class="confirm-val green" id="s4-save">0 đ</span></div>
+      <div class="goal-row">
+        <span class="goal-label">Hệ số sử dụng mục tiêu</span>
+        <div class="goal-right">
+          <span class="goal-threshold">≤ 105%</span>
+          <span class="goal-status" id="s4-goal-status">(Đạt 100%)</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-main" onclick="goTo('s1')" style="width:100%">Về danh sách</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ── Calendar ──
+let calYear=2026,calMonth=4,calSelected=new Date(2026,4,15),calTemp=null;
+const DOWS=['T2','T3','T4','T5','T6','T7','CN'];
+const MONTHS=['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+
+function openCal(){
+  calTemp=new Date(calSelected);
+  calYear=calTemp.getFullYear();calMonth=calTemp.getMonth();
+  renderCal();
+  document.getElementById('cal-overlay').classList.add('open');
+  document.getElementById('date-field').classList.add('active');
+}
+function calCancel(){
+  document.getElementById('cal-overlay').classList.remove('open');
+  document.getElementById('date-field').classList.remove('active');
+}
+function calConfirm(){
+  if(calTemp)calSelected=new Date(calTemp);
+  const d=calSelected;
+  const str=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+  document.getElementById('date-display').textContent=str;
+  calCancel();
+}
+function calMove(dir){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;}renderCal();}
+function calSelectDay(y,m,d){calTemp=new Date(y,m,d);renderCal();}
+function renderCal(){
+  document.getElementById('cal-title').textContent=MONTHS[calMonth]+' '+calYear;
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+  DOWS.forEach(d=>{const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);});
+  const first=new Date(calYear,calMonth,1).getDay(); // 0=Sun
+  const startOffset=(first===0?6:first-1); // Mon=0
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const prevDays=new Date(calYear,calMonth,0).getDate();
+  const today=new Date();
+  for(let i=0;i<startOffset;i++){
+    const el=document.createElement('button');el.className='cal-day other-month';
+    el.textContent=prevDays-startOffset+1+i;grid.appendChild(el);
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const el=document.createElement('button');el.className='cal-day';
+    el.textContent=d;
+    const isToday=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
+    const isSel=calTemp&&d===calTemp.getDate()&&calMonth===calTemp.getMonth()&&calYear===calTemp.getFullYear();
+    if(isSel)el.classList.add('selected');
+    else if(isToday)el.classList.add('today');
+    el.onclick=()=>calSelectDay(calYear,calMonth,d);
+    grid.appendChild(el);
+  }
+  const total=startOffset+daysInMonth;const remain=(7-total%7)%7;
+  for(let d=1;d<=remain;d++){const el=document.createElement('button');el.className='cal-day other-month';el.textContent=d;grid.appendChild(el);}
+}
+
+// ── Dropdown ──
+function toggleDropdown(){
+  const menu=document.getElementById('dropdown-menu');
+  const icon=document.getElementById('dropdown-icon');
+  const field=document.getElementById('status-field');
+  const isOpen=menu.classList.contains('open');
+  menu.classList.toggle('open');
+  field.classList.toggle('active',!isOpen);
+  icon.style.transform=isOpen?'':'rotate(180deg)';
+}
+function selectStatus(el,val){
+  document.querySelectorAll('.dropdown-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('status-display').textContent=val;
+  document.getElementById('dropdown-menu').classList.remove('open');
+  document.getElementById('status-field').classList.remove('active');
+  document.getElementById('dropdown-icon').style.transform='';
+}
+document.addEventListener('click',function(e){
+  const wrap=document.querySelector('.dropdown-wrap');
+  if(wrap&&!wrap.contains(e.target)){
+    document.getElementById('dropdown-menu').classList.remove('open');
+    document.getElementById('status-field').classList.remove('active');
+    document.getElementById('dropdown-icon').style.transform='';
+  }
+});
+
+// ── Navigation ──
+function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+
+// ── Vật tư logic ──
+const BASE={tl:210,tbxt:80,tbxl:60,bcl:30,hnpe:15,vtn:8,vtl:6,vdn:5,tbxn:40,gic:50,gint:4,mha:200,tu:100,ginv:20};
+const NAME={tl:'Túi lưới',tbxt:'Túi BHX trung',tbxl:'Túi BHX lớn',bcl:'Bao cuộn lớn',hnpe:'Hộp nhựa PE',vtn:'Vỉ trắng nhỏ',vtl:'Vỉ trắng lớn',vdn:'Vỉ đen nhỏ',tbxn:'Túi BHX nhỏ',gic:'Giấy in cân',gint:'Giấy in nhiệt trắng',mha:'Miếng hút ẩm',tu:'Tem Úc',ginv:'Giấy in nhiệt vàng'};
+const state={};const reasons={};let pendingKey=null,pendingDir=0;
+Object.keys(BASE).forEach(k=>{state[k]=BASE[k];});
+
+function adj(key,delta,base,minPct,maxPct){
+  const newVal=state[key]+delta;const pct=Math.round((newVal-base)/base*100);
+  if(pct<minPct||pct>maxPct)return;
+  if(delta>0&&pct>10){pendingKey=key;pendingDir=delta;document.getElementById('modal-item').textContent=NAME[key];document.getElementById('modal-pct').textContent='+'+pct+'%';document.querySelectorAll('.reason-opt').forEach(o=>{o.classList.remove('sel');o.querySelector('.check').classList.remove('on');});document.getElementById('btn-reason-ok').disabled=true;goTo('s2b');return;}
+  state[key]=newVal;render(key,base);
+}
+function render(key,base){
+  const val=state[key];const el=document.getElementById('qty-'+key);const note=document.getElementById('note-'+key);const pct=Math.round((val-base)/base*100);
+  el.textContent=val;el.className='qty-num';
+  if(val<base){el.classList.add('saved');note.textContent='↓ Giảm '+Math.abs(pct)+'% – tiết kiệm';note.style.color='#34c759';}
+  else if(val>base){el.classList.add('changed');note.textContent='↑ Tăng '+pct+'%'+(pct>10?' – cần RSM duyệt':'');note.style.color=pct>10?'#ff3b30':'#ff9500';}
+  else{note.textContent='Đúng gợi ý';note.style.color='#007aff';}
+}
+function selectReason(el){document.querySelectorAll('.reason-opt').forEach(o=>{o.classList.remove('sel');o.querySelector('.check').classList.remove('on');});el.classList.add('sel');el.querySelector('.check').classList.add('on');document.getElementById('btn-reason-ok').disabled=false;}
+function confirmReason(){if(pendingKey){state[pendingKey]+=pendingDir;render(pendingKey,BASE[pendingKey]);const sel=document.querySelector('.reason-opt.sel');if(sel)reasons[pendingKey]=sel.querySelector('.reason-text').textContent;}pendingKey=null;goTo('s2');}
+function cancelReason(){pendingKey=null;goTo('s2');}
+function tryConfirm(){buildConfirm();goTo('s3');}
+function buildConfirm(){
+  let rows='',downCount=0,upOkCount=0,upRsmCount=0,savePct=0,totalUpPct=0;
+  Object.keys(BASE).forEach(k=>{
+    const b=BASE[k],v=state[k];if(v===b)return;
+    const pct=Math.round((v-b)/b*100);const sign=pct>0?'+':'';
+    if(pct<0){rows+=`<div class="change-row"><span style="font-size:14px;color:#000">${NAME[k]}</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;color:#000">${v}</span><span class="pill pill-green">${sign}${pct}%</span></div></div>`;downCount++;savePct+=Math.abs(pct);}
+    else if(pct<=10){rows+=`<div class="change-row"><span style="font-size:14px;color:#000">${NAME[k]}</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;color:#000">${v}</span><span class="pill pill-orange">${sign}${pct}%</span></div></div>`;upOkCount++;totalUpPct+=pct;}
+    else{rows+=`<div class="change-row"><span style="font-size:14px;color:#000">${NAME[k]}</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;color:#000">${v}</span><span class="pill pill-orange">${sign}${pct}%</span><span class="pill pill-red">RSM duyệt</span></div></div>`;upRsmCount++;totalUpPct+=pct;}
+  });
+  document.getElementById('section-changes').style.display=rows?'block':'none';
+  document.getElementById('changes-list').innerHTML=rows;
+  document.getElementById('row-down').style.display=downCount?'flex':'none';document.getElementById('cf-down').textContent=downCount+' mặt hàng';
+  document.getElementById('row-up-ok').style.display=upOkCount?'flex':'none';document.getElementById('cf-up-ok').textContent=upOkCount+' mặt hàng';
+  document.getElementById('row-up-rsm').style.display=upRsmCount?'flex':'none';document.getElementById('cf-up-rsm').textContent=upRsmCount+' mặt hàng';
+  const estSave=Math.round(savePct*85000);const saveStr=estSave>0?estSave.toLocaleString('vi-VN')+' đ':'0 đ';
+  document.getElementById('cf-save').textContent=saveStr;document.getElementById('s4-save').textContent=saveStr;
+  document.getElementById('rsm-banner').style.display=upRsmCount?'block':'none';
+  document.getElementById('s4-status').textContent=upRsmCount?'Chờ RSM duyệt':'Siêu thị chờ duyệt';
+  document.getElementById('s4-status').className='pill '+(upRsmCount?'pill-orange':'pill-green');
+  const upTotal=upOkCount+upRsmCount;
+  let simCoeff=upTotal>0?100+Math.round(totalUpPct/upTotal):downCount>0?98:100;
+  const pass=simCoeff<=105;
+  const goalEl=document.getElementById('s4-goal-status');
+  goalEl.textContent=(pass?'(Đạt ':'(Chưa đạt ')+simCoeff+'%)';
+  goalEl.className='goal-status '+(pass?'pass':'fail');
+}
+</script>
